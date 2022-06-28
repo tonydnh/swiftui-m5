@@ -16,6 +16,8 @@
 		B1397F0A286A485300C1071F /* style.html in Resources */ = {isa = PBXBuildFile; fileRef = B1397F08286A485300C1071F /* style.html */; };
 		B1397F0C286A646E00C1071F /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1397F0B286A646E00C1071F /* Models.swift */; };
 		B1397F0E286A784E00C1071F /* HomeViewRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1397F0D286A784E00C1071F /* HomeViewRow.swift */; };
+		B1397F14286A9F5800C1071F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1397F13286A9F5800C1071F /* ContentView.swift */; };
+		B1397F16286AA57400C1071F /* ContentViewRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1397F15286AA57400C1071F /* ContentViewRow.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +31,8 @@
 		B1397F08286A485300C1071F /* style.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = style.html; sourceTree = "<group>"; };
 		B1397F0B286A646E00C1071F /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		B1397F0D286A784E00C1071F /* HomeViewRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewRow.swift; sourceTree = "<group>"; };
+		B1397F13286A9F5800C1071F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		B1397F15286AA57400C1071F /* ContentViewRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewRow.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +90,8 @@
 			children = (
 				B128DE2C286A43FC004AD7E2 /* HomeView.swift */,
 				B1397F0D286A784E00C1071F /* HomeViewRow.swift */,
+				B1397F13286A9F5800C1071F /* ContentView.swift */,
+				B1397F15286AA57400C1071F /* ContentViewRow.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -196,7 +202,9 @@
 			files = (
 				B128DE2D286A43FC004AD7E2 /* HomeView.swift in Sources */,
 				B1397F0E286A784E00C1071F /* HomeViewRow.swift in Sources */,
+				B1397F14286A9F5800C1071F /* ContentView.swift in Sources */,
 				B128DE2B286A43FC004AD7E2 /* LearningApp.swift in Sources */,
+				B1397F16286AA57400C1071F /* ContentViewRow.swift in Sources */,
 				B128DE3E286A4667004AD7E2 /* ContentModel.swift in Sources */,
 				B1397F0C286A646E00C1071F /* Models.swift in Sources */,
 			);
