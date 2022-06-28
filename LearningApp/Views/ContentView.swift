@@ -22,7 +22,14 @@ struct ContentView: View {
                     
                     ForEach(0..<model.currentModule!.content.lessons.count, id: \.self) { i in
                         
-                        ContentViewRow(i: i)
+                        NavigationLink {
+                            ContentDetailView()
+                                .onAppear {
+                                    model.beginLesson(i)
+                                }
+                        } label: {
+                            ContentViewRow(i: i)
+                        }
                         
                     }
                     
@@ -30,6 +37,7 @@ struct ContentView: View {
                 
             }
             .padding()
+            .foregroundColor(.black)
             .navigationTitle("Learning \(model.currentModule?.category ?? "")")
             
         }
