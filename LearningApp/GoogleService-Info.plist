@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>729711663983-vhitjcft061s5019n3mvrajrgq6fnoap.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.729711663983-vhitjcft061s5019n3mvrajrgq6fnoap</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAEMTCAQAV02p1OC5CrnCjoCh6ttQ2qbro</string>
+	<key>GCM_SENDER_ID</key>
+	<string>729711663983</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.tonydinh.LearningApp2</string>
+	<key>PROJECT_ID</key>
+	<string>firestore-learning-app-3225f</string>
+	<key>STORAGE_BUCKET</key>
+	<string>firestore-learning-app-3225f.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:729711663983:ios:5a93617f6f731d63b2669a</string>
+</dict>
+</plist>
