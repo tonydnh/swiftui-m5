@@ -28,11 +28,13 @@ struct HomeView: View {
                             
                             VStack(spacing: 20) {
                                 
-                                NavigationLink(tag: module.id, selection: $model.currentContentSelected) {
+                                NavigationLink(tag: module.id.hash, selection: $model.currentContentSelected) {
                                     
                                     ContentView()
                                         .onAppear {
-                                            model.beginModule(module.id)
+                                            model.getLessons(module: module) {
+                                                model.beginModule(module.id)
+                                            }
                                         }
                                     
                                 } label: {
@@ -40,11 +42,13 @@ struct HomeView: View {
                                     HomeViewRow(image: module.content.image, title: "Learn \(module.category)", description: module.content.description, count: "\(module.content.lessons.count) Lessons", time: module.content.time)
                                 }
                                 
-                                NavigationLink(tag: module.id, selection: $model.currentTestSelected) {
+                                NavigationLink(tag: module.id.hash, selection: $model.currentTestSelected) {
                                     
                                     TestView()
                                         .onAppear {
-                                            model.beginTest(module.id)
+                                            model.getQuestions(module: module) {
+                                                model.beginTest(module.id)
+                                            }
                                         }
                                     
                                 } label: {

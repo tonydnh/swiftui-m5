@@ -6,8 +6,12 @@
 //
 
 import Foundation
+import FirebaseCore
+import FirebaseFirestore
 
 class ContentModel: ObservableObject {
+    
+    let db = FirebaseFirestore.Firestore.firestore()
     
     // List of modules
     @Published var modules = [Module]()
@@ -34,16 +38,159 @@ class ContentModel: ObservableObject {
     var styleData:Data?
     
     init() {
-        // Parse local included json data
-        getLocalData()
+        // Parse local style.html
+        getLocalStyles()
+        
+        // Get database modules
+        getModules()
         
         // Download remote json file and parse data
-        getRemoteData()
+        // getRemoteData()
     }
     
     // MARK: - Data methods
     
-    func getLocalData() {
+    func getLessons(module: Module, completion: @escaping () -> Void) {
+        // Specify path
+        let collection = db.collection("modules").document(module.id).collection("lessons")
+        
+        // Get documents
+        collection.getDocuments { snapshot, error in
+            if let error = error {
+                print(error.localizedDescription)
+            }
+            else if let snapshot = snapshot {
+                // Array to track lessons
+                var lessons = [Lesson]()
+                
+                // Loop through the documents and build array of lessons
+                for doc in snapshot.documents {
+                    // New lesson
+                    var l = Lesson()
+                    
+                    l.id = doc["id"] as? String ?? UUID().uuidString
+                    l.title = doc["title"] as? String ?? ""
+                    l.video = doc["video"] as? String ?? ""
+                    l.duration = doc["duration"] as? String ?? ""
+                    l.explanation = doc["explanation"] as? String ?? ""
+                    
+                    // Add the lesson to the array
+                    lessons.append(l)
+                }
+                
+                // Setting the lessons to the module
+                // Loop through published modules array and find the one that matches the id of the copy that got passed in
+                for (index, m) in self.modules.enumerated() {
+                    if m.id == module.id {
+                        // Set the lessons
+                        self.modules[index].content.lessons = lessons
+                        
+                        // Call the completion closure
+                        completion()
+                    }
+                }
+                
+            }
+        }
+    }
+    
+    func getQuestions(module: Module, completion: @escaping () -> Void) {
+        // Specify path
+        let collection = db.collection("modules").document(module.id).collection("questions")
+        
+        // Get documents
+        collection.getDocuments { snapshot, error in
+            if let error = error {
+                print(error.localizedDescription)
+            }
+            else if let snapshot = snapshot {
+                // Array to track questions
+                var questions = [Question]()
+                
+                // Loop through the documents and build array of questions
+                for doc in snapshot.documents {
+                    // New question
+                    var q = Question()
+                    
+                    q.id = doc["id"] as? String ?? UUID().uuidString
+                    q.content = doc["content"] as? String ?? ""
+                    q.correctIndex = doc["correctIndex"] as? Int ?? 0
+                    q.answers = doc["answers"] as? [String] ?? [String]()
+                    
+                    // Add the question to the array
+                    questions.append(q)
+                }
+                
+                // Setting the questions to the module
+                // Loop through published modules array and find the one that matches the id of the copy that got passed in
+                for (index, m) in self.modules.enumerated() {
+                    if m.id == module.id {
+                        // Set the lessons
+                        self.modules[index].test.questions = questions
+                        
+                        // Call the completion closure
+                        completion()
+                    }
+                }
+                
+            }
+        }
+    }
+    
+    func getModules() {
+        // Specify path
+        let collection = db.collection("modules")
+        
+        // Get documents
+        collection.getDocuments { snapshot, error in
+            if let error = error {
+                print(error.localizedDescription)
+            }
+            else if let snapshot = snapshot {
+                // Create an array for the modules
+                var modules = [Module]()
+                
+                // Loop through the documents returned
+                for doc in snapshot.documents {         
+                    // Create a new module instance
+                    var m = Module()
+                    
+                    // Parse out the values from the document into the module instance
+                    m.id = doc["id"] as? String ?? UUID().uuidString
+                    m.category = doc["category"] as? String ?? ""
+                    
+                    // Parse out the lesson content
+                    let contentMap = doc["content"] as! [String: Any]
+                    
+                    m.content.id = contentMap["id"] as? String ?? ""
+                    m.content.description = contentMap["description"] as? String ?? ""
+                    m.content.image = contentMap["image"] as? String ?? ""
+                    m.content.time = contentMap["time"] as? String ?? ""
+
+                    
+                    // Parse out the test content
+                    let testMap = doc["test"] as! [String: Any]
+                    
+                    m.test.id = testMap["id"] as? String ?? ""
+                    m.test.description = testMap["description"] as? String ?? ""
+                    m.test.image = testMap["image"] as? String ?? ""
+                    m.test.time = testMap["time"] as? String ?? ""
+
+                    
+                    // Add it to our array
+                    modules.append(m)
+                }
+                
+                // Assign our modules to the published property
+                DispatchQueue.main.async {
+                    self.modules = modules
+                }
+            }
+        }
+    }
+    
+    func getLocalStyles() {
+        /*
         // Get a url to the json
         let jsonUrl = Bundle.main.url(forResource: "data", withExtension: "json")
         
@@ -61,6 +208,7 @@ class ContentModel: ObservableObject {
         catch {
             print("Couldn't parse local data")
         }
+        */
         
         // Parse the style data
         let styleUrl = Bundle.main.url(forResource: "style", withExtension: "html")
@@ -130,7 +278,7 @@ class ContentModel: ObservableObject {
     
     // MARK: - Module navigation methods
     
-    func beginModule(_ moduleid:Int) {
+    func beginModule(_ moduleid:String) {
         
         // Find the index for this module id
         for i in 0..<modules.count {
@@ -188,7 +336,7 @@ class ContentModel: ObservableObject {
         return currentLessonIndex + 1 < currentModule!.content.lessons.count
     }
     
-    func beginTest(_ moduleId:Int) {
+    func beginTest(_ moduleId:String) {
         // Set the current module
         beginModule(moduleId)
         
