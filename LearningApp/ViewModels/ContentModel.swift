@@ -229,7 +229,6 @@ class ContentModel: ObservableObject {
                     m.content.description = contentMap["description"] as? String ?? ""
                     m.content.image = contentMap["image"] as? String ?? ""
                     m.content.time = contentMap["time"] as? String ?? ""
-
                     
                     // Parse out the test content
                     let testMap = doc["test"] as! [String: Any]
@@ -238,7 +237,6 @@ class ContentModel: ObservableObject {
                     m.test.description = testMap["description"] as? String ?? ""
                     m.test.image = testMap["image"] as? String ?? ""
                     m.test.time = testMap["time"] as? String ?? ""
-
                     
                     // Add it to our array
                     modules.append(m)
@@ -358,6 +356,8 @@ class ContentModel: ObservableObject {
     }
     
     func beginLesson(_ lessonIndex:Int) {
+        // Reset the currentQuestionIndex since the user is starting lessons now
+        currentQuestionIndex = 0
         
         // Check that the lesson index is within range of module lessons
         if lessonIndex < currentModule!.content.lessons.count {
@@ -408,6 +408,9 @@ class ContentModel: ObservableObject {
         
         // Set the current question index
         currentQuestionIndex = 0
+        
+        // Reset the lesson index since they're starting a test now
+        currentLessonIndex = 0
     
         // If there are questions, set the current question to the first one
         if currentModule?.test.questions.count ?? 0 > 0 {
