@@ -6,6 +6,9 @@
 //
 
 import SwiftUI
+import FirebaseAuth
+import FirebaseCore
+import FirebaseFirestore
 
 struct LoginView: View {
     
@@ -14,6 +17,7 @@ struct LoginView: View {
     @State var email = ""
     @State var name = ""
     @State var password = ""
+    @State var errorMessage: String?
     
     var buttonText: String {
         if loginMode == Constants.LoginMode.login {
@@ -52,21 +56,71 @@ struct LoginView: View {
             .pickerStyle(.segmented)
             
             // Form
-            TextField("Email", text: $email)
-            
-            if loginMode == Constants.LoginMode.createAccount {
-                TextField("Name", text: $name)
+            Group {
+                TextField("Email", text: $email)
+                
+                if loginMode == Constants.LoginMode.createAccount {
+                    TextField("Name", text: $name)
+                }
+                
+                SecureField("Password", text: $password)
+                
+                if errorMessage != nil {
+                    Text(errorMessage!)
+                }
             }
-            
-            SecureField("Password", text: $password)
+            .textInputAutocapitalization(.never)
             
             // Button
             Button {
                 if loginMode == Constants.LoginMode.login {
                     // Log the user in
+                    Auth.auth().signIn(withEmail: email, password: password) { result, error in
+                        // Check for errors
+                        guard error == nil else {
+                            errorMessage = error!.localizedDescription
+                            return
+                        }
+                        
+                        // Clear error message
+                        errorMessage = nil
+                        
+                        // Fetch the user meta data
+                        model.getUserData()
+                        
+                        // Change the view to logged in view
+                        model.checkLogin()
+                        
+                    }
+                    
                 }
                 else {
                     // Create a new account
+                    Auth.auth().createUser(withEmail: email, password: password) { result, error in
+                        // Check for errors
+                        guard error == nil else {
+                            errorMessage = error!.localizedDescription
+                            return
+                        }
+                        
+                        // Clear error message
+                        errorMessage = nil
+                        
+                        // Save the first name
+                        let firebaseUser = Auth.auth().currentUser
+                        let db = Firestore.firestore()
+                        let ref = db.collection("users").document(firebaseUser!.uid)
+                        
+                        ref.setData(["name": name], merge: true)
+                        
+                        // Update the user meta data
+                        let user = UserService.shared.user
+                        user.name = name
+                        
+                        // Change the view to logged in view
+                        model.checkLogin()
+                        
+                    }
                 }
             } label: {
                 ZStack {
