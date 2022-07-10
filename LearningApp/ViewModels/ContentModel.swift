@@ -8,8 +8,12 @@
 import Foundation
 import FirebaseCore
 import FirebaseFirestore
+import FirebaseAuth
 
 class ContentModel: ObservableObject {
+    
+    // Authentication
+    @Published var loggedIn = false
     
     let db = FirebaseFirestore.Firestore.firestore()
     
@@ -38,9 +42,14 @@ class ContentModel: ObservableObject {
     var styleData:Data?
     
     init() {
-
         
-        
+    }
+    
+    // MARK: - Authentication methods
+    
+    func checkLogin() {
+        // Check if there's a current user to determine logged in status
+        loggedIn = Auth.auth().currentUser != nil ? true : false
     }
     
     // MARK: - Data methods
